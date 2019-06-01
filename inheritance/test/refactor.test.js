@@ -15,7 +15,7 @@ describe('refactor', () => {
     });
 
 
-    it.only('Intentando evitar el this', () => {
+    it.only('Evitando usar `this`', () => {
         const walk = ({animal}, mod) => {
             return mod ? `${animal} is walking ${mod}` : `${animal} is walking`;
         } 
