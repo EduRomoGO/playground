@@ -16,7 +16,9 @@ describe('refactor', () => {
 
 
     it.only('Intentando evitar el this', () => {
-        const walk = ({animal}) => `${animal} is walking`; 
+        const walk = ({animal}, mod) => {
+            return mod ? `${animal} is walking ${mod}` : `${animal} is walking`;
+        } 
 
         const petProps = {
             animal: 'dog',
@@ -28,7 +30,7 @@ describe('refactor', () => {
 
         const wrappedPetMethods = Object.keys(petMethods).reduce(
             (acc, next) => {
-                acc[next] = (...args) => petMethods[next](...args, petProps);
+                acc[next] = (...args) => petMethods[next](petProps, ...args);
                 return acc;
             },
             {},
@@ -36,7 +38,7 @@ describe('refactor', () => {
 
         const petFactory = () => {
             return {
-                props: petProps,
+                ...petProps,
                 ...wrappedPetMethods,
             }
         };
@@ -45,6 +47,7 @@ describe('refactor', () => {
 
         expect(dogPet.walk(dogPet.props)).to.equal('dog is walking');
         expect(dogPet.walk()).to.equal('dog is walking');
+        expect(dogPet.walk('slowly')).to.equal('dog is walking slowly');
     });
 
 });
