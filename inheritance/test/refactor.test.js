@@ -7,7 +7,7 @@ const { objectCreatedWithClass } = require('../src/refactor.js');
 describe('refactor', () => {
 
     describe('from class to factory', () => {
-        xit('works', () => {
+        xit('should work', () => {
             expect(objectCreatedWithClass.greet()).to.equal(`hola ${objectCreatedWithClass.name}`);
         });
     });
