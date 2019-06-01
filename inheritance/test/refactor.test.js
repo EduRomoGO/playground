@@ -1,14 +1,15 @@
 const chai = require('chai');
 const expect = chai.expect;
 
-const { objectCreatedWithClass } = require('../src/refactor.js');
-
+const { friendCreatedWithClass, friendCreatedWithFactory } = require('../src/refactor.js');
 
 describe('refactor', () => {
 
     describe('from class to factory', () => {
-        xit('should work', () => {
-            expect(objectCreatedWithClass.greet()).to.equal(`hola ${objectCreatedWithClass.name}`);
+        it('should work', () => {
+            expect(friendCreatedWithClass.introduceHimself()).to.equal(`Hi, I am ${friendCreatedWithClass.name}`);
+            expect(friendCreatedWithFactory.introduceHimself()).to.equal(`Hi, I am ${friendCreatedWithClass.name}`);
+            expect(friendCreatedWithClass.introduceHimself()).to.equal(friendCreatedWithFactory.introduceHimself());
         });
     });
 
