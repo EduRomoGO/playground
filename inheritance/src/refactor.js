@@ -11,8 +11,19 @@ class FriendClass {
 
 const friendCreatedWithClass = new FriendClass();
 
+
+// TODO: solution
+const friendFactory = () => {
+    return {
+        name: 'Edu',
+        introduceHimself: function () {
+            return `Hi, I am ${this.name}`;
+        },
+    };
+};
+
 // Create the implementation
-const friendCreatedWithFactory = {};
+const friendCreatedWithFactory = friendFactory();
 
 module.exports = {
     friendCreatedWithClass,
