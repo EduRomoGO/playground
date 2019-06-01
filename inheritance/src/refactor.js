@@ -1,24 +1,27 @@
+function introduceHimself () {
+    return `Hi, I am ${this.name}`;    
+}
+
+// When adding methods dinamically you have to use the prototype
+
 class FriendClass {
 
     constructor() {
         this.name = 'Edu';
     }
-
-    introduceHimself() {
-        return `Hi, I am ${this.name}`;
-    }
+    
 }
 
+FriendClass.prototype.introduceHimself = introduceHimself;
 const friendCreatedWithClass = new FriendClass();
+// friendCreatedWithClass.introduceHimself = introduceHimself;
 
 
 // TODO: solution
 const friendFactory = () => {
     return {
         name: 'Edu',
-        introduceHimself: function () {
-            return `Hi, I am ${this.name}`;
-        },
+        introduceHimself,
     };
 };
 
