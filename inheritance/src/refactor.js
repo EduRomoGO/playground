@@ -25,6 +25,9 @@ const friendFactory = () => {
     };
 };
 
+// Ambas soluciones estan basadas en la programacion orientada a objetos, por lo que el uso del this parece inevitable
+
+
 // Create the implementation
 const friendCreatedWithFactory = friendFactory();
 
