@@ -1,10 +1,10 @@
 {
-  "name": "inheritance",
+  "name": "playground",
   "version": "1.0.0",
-  "description": "Inheritance examples",
+  "description": "bunch of repos to teach/learn",
   "main": "index.js",
   "scripts": {
-    "test": "node ./node_modules/mocha/bin/mocha ./test/*.test.js -w"
+    "test": "node ./prototypes/node_modules/mocha/bin/mocha ./**/test/*.test.js -w"
   },
   "author": "@EduRomoGO",
   "license": "ISC",

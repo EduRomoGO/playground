@@ -1,7 +1,7 @@
 {
-  "name": "inheritance",
+  "name": "prototypes",
   "version": "1.0.0",
-  "description": "Inheritance examples",
+  "description": "prototypes examples",
   "main": "index.js",
   "scripts": {
     "test": "node ./node_modules/mocha/bin/mocha ./test/*.test.js -w"
