@@ -16,6 +16,13 @@ describe('refactor', () => {
 
 
     it.only('Evitando usar `this`', () => {
+        const methodsWrapper = methods => Object.keys(methods).reduce(
+            (acc, next) => {
+                acc[next] = (...args) => petMethods[next](petProps, ...args);
+                return acc;
+            },
+            {},
+        );
         const walk = ({animal}, mod) => {
             return mod ? `${animal} is walking ${mod}` : `${animal} is walking`;
         } 
@@ -28,18 +35,10 @@ describe('refactor', () => {
             walk,
         };
 
-        const wrappedPetMethods = Object.keys(petMethods).reduce(
-            (acc, next) => {
-                acc[next] = (...args) => petMethods[next](petProps, ...args);
-                return acc;
-            },
-            {},
-        );
-
         const petFactory = () => {
             return {
                 ...petProps,
-                ...wrappedPetMethods,
+                ...methodsWrapper(petMethods),
             }
         };
 
