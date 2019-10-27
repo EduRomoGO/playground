@@ -1,0 +1,18 @@
+{
+  "name": "async",
+  "version": "1.0.0",
+  "description": "Async examples",
+  "main": "index.js",
+  "scripts": {
+    "test": "node ./node_modules/mocha/bin/mocha ./test/*.test.js -w"
+  },
+  "author": "@EduRomoGO",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4"
+  },
+  "dependencies": {
+    "muss-rumble": "^3.20.0"
+  }
+}
