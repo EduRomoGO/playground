@@ -16,16 +16,15 @@ describe('refactor', () => {
 
 
     it('Evitando usar `this`', () => {
-        const methodsWrapper = methods => Object.keys(methods).reduce(
-            (acc, next) => {
-                acc[next] = (...args) => petMethods[next](petProps, ...args);
-                return acc;
-            },
+        const wrapMethodsToPassAlsoItemProps = (methods, props) => Object.keys(methods).reduce(
+            (newMethods, next) => ({...newMethods, [next]: (...args) => methods[next](props, ...args)}),
             {},
         );
-        const walk = ({animal}, mod) => {
-            return mod ? `${animal} is walking ${mod}` : `${animal} is walking`;
-        } 
+        const walk = ({animal}, mode) => {
+            return mode ? `${animal} is walking ${mode}` : `${animal} is walking`;
+        };
+
+        // const eat = ()
 
         const petProps = {
             animal: 'dog',
@@ -38,8 +37,8 @@ describe('refactor', () => {
         const petFactory = () => {
             return {
                 ...petProps,
-                ...methodsWrapper(petMethods),
-            }
+                ...wrapMethodsToPassAlsoItemProps(petMethods, petProps),
+            };
         };
 
         const dogPet = petFactory();
