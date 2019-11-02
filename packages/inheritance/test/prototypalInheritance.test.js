@@ -13,7 +13,7 @@ describe('prototypal inheritance', () => {
 
         const myAnimal = animalFactory();
 
-        const duckFactory = () => (Object.assign(Object.create(myAnimal), {cuack, fly, walk}));
+        const duckFactory = () => ({...Object.create(myAnimal), cuack, fly, walk});
         
         const someDuck = duckFactory();
         
@@ -21,9 +21,9 @@ describe('prototypal inheritance', () => {
     });
 
     it('concatenative inheritance', () => {
-
+        const horn = () => 'pi piii';
         const carProto = { wheels: 4, doorOptions: [3, 5]};
 
-        const ferrariFactory = () => ({...carProto, brand: 'ferrari'});
+        const ferrariFactory = () => ({...carProto, brand: 'ferrari', horn});
     });
 })
