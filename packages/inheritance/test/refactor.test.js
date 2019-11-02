@@ -2,7 +2,7 @@ const chai = require('chai');
 
 const expect = chai.expect;
 
-const { friendCreatedWithClass, friendCreatedWithFactory } = require('../src/refactor.js');
+const { introduceHimself, friendCreatedWithClass, friendCreatedWithFactory } = require('../src/refactor.js');
 
 describe('refactor', () => {
 
@@ -14,6 +14,14 @@ describe('refactor', () => {
         });
     });
 
+    it('introduceHimself to be tested needs to have an evironment where all the props accessed with this are provided. Thats why the use of `this` makes it harder to test functions isolated', () => {
+        const foo = {
+            name: 'Carlos',
+            introduceHimself,
+        };
+
+        expect(foo.introduceHimself()).to.equal(`Hi, I am ${foo.name}`);
+    });
 
     it('Evitando usar `this`', () => {
         const wrapMethodsToPassAlsoItemProps = (methods, props) => Object.keys(methods).reduce(

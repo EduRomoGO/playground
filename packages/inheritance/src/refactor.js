@@ -17,7 +17,6 @@ const friendCreatedWithClass = new FriendClass();
 // friendCreatedWithClass.introduceHimself = introduceHimself;
 
 
-// TODO: solution
 const friendFactory = () => {
     return {
         name: 'Edu',
@@ -25,13 +24,18 @@ const friendFactory = () => {
     };
 };
 
-// Ambas soluciones estan basadas en la programacion orientada a objetos, por lo que el uso del this parece inevitable
-
-
 // Create the implementation
 const friendCreatedWithFactory = friendFactory();
 
+// Ambas soluciones estan basadas en la programacion orientada a objetos,
+// por lo que el uso del this es casi inevitable. Pero podria haber una
+// alternativa. Ver en refactor.test.js ejemplo de como hacerlo. Habría
+// que evaluar si esa alternativa merece la pena o no
+
+
+
 module.exports = {
+    introduceHimself,
     friendCreatedWithClass,
     friendCreatedWithFactory,
 };
