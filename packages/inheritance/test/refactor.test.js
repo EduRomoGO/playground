@@ -22,6 +22,7 @@ describe('refactor', () => {
 
         expect(foo.introduceHimself()).to.equal(`Hi, I am ${foo.name}`);
     });
+    
 
     it('Evitando usar `this`', () => {
         const wrapMethodsToPassAlsoItemProps = (methods, props) => Object.keys(methods).reduce(
@@ -67,4 +68,38 @@ describe('refactor', () => {
         expect(dogPet.walk('slowly')).to.equal('dog is walking slowly');
     });
 
+
+    describe('prototypal inheritance', () => {
+
+        describe('constructor function', () => {
+            it('only works with constructor function. Esto es debido a que la funcion constructora asigna su prototipo al nuevo objeto', () => {
+                function Car () {
+                    this.engine = 'v8';
+                }
+        
+                Car.prototype.start = function () {
+                    return 'vroom';
+                }
+        
+                const myCar = new Car();
+
+                expect(myCar.start()).to.equal('vroom');
+            });
+
+            it('it does not work on factory functions', () => {
+                function Car () {
+                    return {engine: 'v8'};
+                }
+
+                Car.prototype.start = function () {
+                    return 'vroom';
+                }
+        
+                const myCar = Car();
+
+                expect(myCar.start).to.be.undefined;
+            });
+        });
+
+    });
 });
