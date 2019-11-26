@@ -4,30 +4,44 @@ import './index.css';
 
 // Let’s fill the Square component with an “X” when we click it. First, change the button tag that is returned from the Square component’s render() function to this
 
-class Square extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-
-  //   }
-  // }
-
-  render() {
-    return (
-      <button className="square" onClick={() => console.log('click')}>
-        {this.props.value}
-      </button>
-    );
-  }
-}
+const Square = ({onClick, value}) => (
+  <button className="square" onClick={onClick}>{value}</button>
+);
 
 class Board extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      squares: Array(9).fill(null),
+      xIsNext: true,
+    };
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick(index) {
+    let newSquares = [...this.state.squares];
+    if (calculateWinner(newSquares) || newSquares[index]) {
+      return;
+    }
+    newSquares[index] = this.state.xIsNext ? 'X' : 'O';
+    this.setState({
+      squares: newSquares,
+      xIsNext: !this.state.xIsNext,
+    });
+  }
+
   renderSquare(i) {
-    return <Square value={i} />;
+    return <Square value={this.state.squares[i]} onClick={() => this.handleClick(i)} />;
   }
 
   render() {
-    const status = 'Next player: X';
+    const winner = calculateWinner(this.state.squares);
+    let status;
+    if (winner) {
+      status = `${winner} won the game!`;
+    } else {
+      status = `Next player: ${this.state.xIsNext ? 'X' : 'O'}`;
+    }
 
     return (
       <div>
@@ -69,6 +83,27 @@ class Game extends React.Component {
 }
 
 // ========================================
+
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
 
 ReactDOM.render(
   <Game />,
