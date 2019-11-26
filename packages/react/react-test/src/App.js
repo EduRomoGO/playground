@@ -1,12 +1,18 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import './test/NameFormClass.js';
+import NameFormClass from './test/NameFormClass.js';
+import NameFormFunction from './test/NameFormFunction.js';
+import BoilingVerdict from './test/BoilingVerdict.js';
+import Calculator from './test/Calculator.js';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
+        <Calculator />
+        <BoilingVerdict celsius={280} />
+        <NameFormFunction />
+        <NameFormClass />
       </header>
     </div>
   );
