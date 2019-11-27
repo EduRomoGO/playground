@@ -13,6 +13,24 @@
             "restart": true,
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen"
+        },
+        {
+            "name": "Debug CRA Tests",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "${workspaceRoot}/packages/react/tic-tac-toe/node_modules/.bin/react-scripts",
+            "args": [
+                "test",
+                "--runInBand",
+                "--no-cache",
+                "--watchAll=false"
+            ],
+            "cwd": "${workspaceRoot}/packages/react/tic-tac-toe/",
+            "protocol": "inspector",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "env": { "CI": "true" },
+            "disableOptimisticBPs": true
         }
     ]
 }
