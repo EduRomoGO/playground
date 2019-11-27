@@ -1,6 +1,6 @@
-import React from '.react';
-import { unmountComponentAtNode, render } from ".react-dom";
-import { act } from '.react-dom/test-utils';
+import React from 'react';
+import { unmountComponentAtNode, render } from "react-dom";
+import { act } from 'react-dom/test-utils';
 import Square from './Square.js';
 
 describe('Square', () => {
