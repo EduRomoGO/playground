@@ -30,4 +30,24 @@ describe('Board', () => {
 
     expect(document.querySelectorAll('[data-testid="square"]').length).toBe(9);
   });
+
+  it('calls onClick prop callback each time a Square is clicked', () => {
+    const onClick = jest.fn();
+
+    act(() => {
+      const squares = Array(9).fill(null);
+
+      render(<Board squares={squares} onClick={onClick} />, container);
+    });
+
+    const squares = document.querySelectorAll('[data-testid="square"]');
+
+    act(() => {
+      squares.forEach(square => {
+        square.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      });
+    });
+
+    expect(onClick).toHaveBeenCalledTimes(9);
+  });
 });

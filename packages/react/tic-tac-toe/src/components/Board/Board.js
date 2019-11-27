@@ -24,6 +24,5 @@ export default ({squares, onClick}) => {
     </div>
   </div>);
 
-
   return squares ? getBoard() : <div data-testid="board">no board</div>;
 };
