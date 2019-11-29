@@ -54,7 +54,6 @@ describe("Game", () => {
       expect(square.innerHTML).toBe(nextPlayerSymbol);
     };
 
-
     it('should handle onClick event on any square filling it with next player symbol', () => {
       act(() => {
         render(<Game />, container);
@@ -64,7 +63,7 @@ describe("Game", () => {
       clickingEmptySquareFillItWithNextPlayerSymbol(getSquare(5));
     });
 
-    it('should not allow override already clicked square', () => {
+    it('should not change content of already clicked square', () => {
       act(() => {
         render(<Game />, container);
       });
@@ -73,18 +72,30 @@ describe("Game", () => {
       // const nextPlayerSymbol = getNextPlayerSymbol();
 
 
-      const clickingSameSquareDoesNotChangeItsContent = () => {
-        const squareContentBeforeClickingAgain = secondSquare.innerHTML;
-        // const nextPlayerSymbol = getNextPlayerSymbol();
+      const clickingSameSquareDoesNotChangeItsContent = square => {
+        const squareContentBeforeClickingAgain = square.innerHTML;
         act(() => {
-          secondSquare.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+          square.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
 
-        expect(squareContentBeforeClickingAgain).toBe(secondSquare.innerHTML);
+        expect(squareContentBeforeClickingAgain).toBe(square.innerHTML);
+      };
+
+      const clickingSameSquareDoesNotChangeGameStatus = square => {
+        const nextPlayerSymbolBeforeClickingAgain = getNextPlayerSymbol();
+
+        act(() => {
+          square.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+        });
+
+        const nextPlayerSymbolAfterClickingAgain = getNextPlayerSymbol();
+
+        expect(nextPlayerSymbolBeforeClickingAgain).toBe(nextPlayerSymbolAfterClickingAgain);
       };
 
       clickingEmptySquareFillItWithNextPlayerSymbol(secondSquare);
-      clickingSameSquareDoesNotChangeItsContent();
+      clickingSameSquareDoesNotChangeItsContent(secondSquare);
+      clickingSameSquareDoesNotChangeGameStatus(secondSquare);
     });
   });
 });
