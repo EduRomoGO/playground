@@ -17,7 +17,7 @@ describe("Game", () => {
     container = null;
   });
 
-  it("renders with/without props", () => {
+  it('renders with/without props', () => {
     act(() => {
       render(<Game />, container);
     });
@@ -37,5 +37,22 @@ describe("Game", () => {
         </div>
       </div>"
     `);
+  });
+
+  describe('board section', () => {
+    it('should handle onClick event on any square filling it with next player symbol', () => {
+      act(() => {
+        render(<Game />, container);
+      });
+
+      const thirdSquare = document.querySelectorAll("[data-testid=square]")[2];
+      const getNextPlayerSymbol = () => document.querySelector('.status').textContent.split(':')[1].trim();
+      const nextPlayerSymbol = getNextPlayerSymbol();
+      expect(thirdSquare.innerHTML).toBe('');
+
+      thirdSquare.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+
+      expect(thirdSquare.innerHTML).toBe(nextPlayerSymbol);
+    });
   });
 });
