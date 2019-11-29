@@ -40,33 +40,28 @@ describe("Game", () => {
   });
 
   describe('board section', () => {
-    let nextPlayerSymbol;
     const getSquare = num => document.querySelectorAll("[data-testid=square]")[num -1];
     const getNextPlayerSymbol = () => document.querySelector('.status').textContent.split(':')[1].trim();
+
+    const clickingEmptySquareFillItWithNextPlayerSymbol = square => {
+      expect(square.innerHTML).toBe('');
+      const nextPlayerSymbol = getNextPlayerSymbol();
+
+      act(() => {
+        square.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      });
+
+      expect(square.innerHTML).toBe(nextPlayerSymbol);
+    };
+
 
     it('should handle onClick event on any square filling it with next player symbol', () => {
       act(() => {
         render(<Game />, container);
       });
 
-      const thirdSquare = getSquare(3);
-      nextPlayerSymbol = getNextPlayerSymbol();
-      expect(thirdSquare.innerHTML).toBe('');
-
-      act(() => {
-        thirdSquare.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-      });
-
-      expect(thirdSquare.innerHTML).toBe(nextPlayerSymbol);
-
-      const fifthSquare = getSquare(5);
-      expect(fifthSquare.innerHTML).toBe('');
-      nextPlayerSymbol = getNextPlayerSymbol();
-
-      act(() => {
-        fifthSquare.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-      });
-      expect(fifthSquare.innerHTML).toBe(nextPlayerSymbol);
+      clickingEmptySquareFillItWithNextPlayerSymbol(getSquare(3));
+      clickingEmptySquareFillItWithNextPlayerSymbol(getSquare(5));
     });
 
     it('should not allow override already clicked square', () => {
@@ -75,27 +70,20 @@ describe("Game", () => {
       });
 
       const secondSquare = getSquare(2);
+      // const nextPlayerSymbol = getNextPlayerSymbol();
 
-      const clickingEmptySquareFillItWithNextPlayerSymbol = () => {
-        expect(secondSquare.innerHTML).toBe('');
-        nextPlayerSymbol = getNextPlayerSymbol();
-
-        act(() => {
-          secondSquare.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-        });
-
-        expect(secondSquare.innerHTML).toBe(nextPlayerSymbol);
-      };
 
       const clickingSameSquareDoesNotChangeItsContent = () => {
+        const squareContentBeforeClickingAgain = secondSquare.innerHTML;
+        // const nextPlayerSymbol = getNextPlayerSymbol();
         act(() => {
           secondSquare.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
 
-        expect(secondSquare.innerHTML).toBe(nextPlayerSymbol);
+        expect(squareContentBeforeClickingAgain).toBe(secondSquare.innerHTML);
       };
 
-      clickingEmptySquareFillItWithNextPlayerSymbol();
+      clickingEmptySquareFillItWithNextPlayerSymbol(secondSquare);
       clickingSameSquareDoesNotChangeItsContent();
     });
   });
