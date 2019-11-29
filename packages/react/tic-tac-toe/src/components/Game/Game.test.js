@@ -41,18 +41,29 @@ describe("Game", () => {
 
   describe('board section', () => {
     it('should handle onClick event on any square filling it with next player symbol', () => {
+      let nextPlayerSymbol;
+
       act(() => {
         render(<Game />, container);
       });
 
-      const thirdSquare = document.querySelectorAll("[data-testid=square]")[2];
+      const getSquare = num => document.querySelectorAll("[data-testid=square]")[num -1];
+
+      const thirdSquare = getSquare(3);
       const getNextPlayerSymbol = () => document.querySelector('.status').textContent.split(':')[1].trim();
-      const nextPlayerSymbol = getNextPlayerSymbol();
+      nextPlayerSymbol = getNextPlayerSymbol();
       expect(thirdSquare.innerHTML).toBe('');
 
       thirdSquare.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 
       expect(thirdSquare.innerHTML).toBe(nextPlayerSymbol);
+
+      const fifthSquare = getSquare(5);
+      expect(fifthSquare.innerHTML).toBe('');
+      nextPlayerSymbol = getNextPlayerSymbol();
+      fifthSquare.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+
+      expect(fifthSquare.innerHTML).toBe(nextPlayerSymbol);
     });
   });
 });
