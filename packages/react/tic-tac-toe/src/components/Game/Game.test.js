@@ -85,7 +85,7 @@ describe("Game", () => {
         clickingSameSquareDoesNotChangeItsContent(secondSquare);
       });
 
-      it('should update game status unless clicking on already clicked square', () => {
+      it('should update game status', () => {
         act(() => {
           render(<Game />, container);
         });
@@ -102,6 +102,16 @@ describe("Game", () => {
           expect(statusBeforeClickingAgain).not.toBe(statusAfterClickingAgain);
         };
 
+        const seventhSquare = getSquare(7);
+
+        clickingEmptySquareChangesGameStatus(seventhSquare);
+      });
+
+      it('should not update game status when clicking on an already clicked square', () => {
+        act(() => {
+          render(<Game />, container);
+        });
+
         const clickingSameSquareDoesNotChangeGameStatus = square => {
           const statusBeforeClickingAgain = getStatus();
 
@@ -114,10 +124,12 @@ describe("Game", () => {
           expect(statusBeforeClickingAgain).toBe(statusAfterClickingAgain);
         };
 
-
         const seventhSquare = getSquare(7);
 
-        clickingEmptySquareChangesGameStatus(seventhSquare);
+        act(() => {
+          seventhSquare.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+        });
+
         clickingSameSquareDoesNotChangeGameStatus(seventhSquare);
       });
     });
