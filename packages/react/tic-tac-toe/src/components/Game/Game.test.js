@@ -41,7 +41,8 @@ describe("Game", () => {
 
   describe('board section', () => {
     const getSquare = num => document.querySelectorAll("[data-testid=square]")[num -1];
-    const getNextPlayerSymbol = () => document.querySelector('.status').textContent.split(':')[1].trim();
+    const getStatus = () => document.querySelector('.status').textContent;
+    const getNextPlayerSymbol = () => getStatus().split(':')[1].trim();
 
     const clickingEmptySquareFillItWithNextPlayerSymbol = square => {
       expect(square.innerHTML).toBe('');
@@ -54,48 +55,71 @@ describe("Game", () => {
       expect(square.innerHTML).toBe(nextPlayerSymbol);
     };
 
-    it('should handle onClick event on any square filling it with next player symbol', () => {
-      act(() => {
-        render(<Game />, container);
-      });
-
-      clickingEmptySquareFillItWithNextPlayerSymbol(getSquare(3));
-      clickingEmptySquareFillItWithNextPlayerSymbol(getSquare(5));
-    });
-
-    it('should not change content of already clicked square', () => {
-      act(() => {
-        render(<Game />, container);
-      });
-
-      const secondSquare = getSquare(2);
-      // const nextPlayerSymbol = getNextPlayerSymbol();
-
-
-      const clickingSameSquareDoesNotChangeItsContent = square => {
-        const squareContentBeforeClickingAgain = square.innerHTML;
+    describe('on square click', () => {
+      it('should fill it with next player symbol', () => {
         act(() => {
-          square.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+          render(<Game />, container);
         });
 
-        expect(squareContentBeforeClickingAgain).toBe(square.innerHTML);
-      };
+        clickingEmptySquareFillItWithNextPlayerSymbol(getSquare(3));
+        clickingEmptySquareFillItWithNextPlayerSymbol(getSquare(5));
+      });
 
-      const clickingSameSquareDoesNotChangeGameStatus = square => {
-        const nextPlayerSymbolBeforeClickingAgain = getNextPlayerSymbol();
-
+      it('should not change its content if has already been clicked', () => {
         act(() => {
-          square.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+          render(<Game />, container);
         });
 
-        const nextPlayerSymbolAfterClickingAgain = getNextPlayerSymbol();
+        const secondSquare = getSquare(2);
 
-        expect(nextPlayerSymbolBeforeClickingAgain).toBe(nextPlayerSymbolAfterClickingAgain);
-      };
+        const clickingSameSquareDoesNotChangeItsContent = square => {
+          const squareContentBeforeClickingAgain = square.innerHTML;
+          act(() => {
+            square.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+          });
 
-      clickingEmptySquareFillItWithNextPlayerSymbol(secondSquare);
-      clickingSameSquareDoesNotChangeItsContent(secondSquare);
-      clickingSameSquareDoesNotChangeGameStatus(secondSquare);
+          expect(squareContentBeforeClickingAgain).toBe(square.innerHTML);
+        };
+
+        clickingEmptySquareFillItWithNextPlayerSymbol(secondSquare);
+        clickingSameSquareDoesNotChangeItsContent(secondSquare);
+      });
+
+      it('should update game status unless clicking on already clicked square', () => {
+        act(() => {
+          render(<Game />, container);
+        });
+
+        const clickingEmptySquareChangesGameStatus = square => {
+          const statusBeforeClickingAgain = getStatus();
+
+          act(() => {
+            square.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+          });
+
+          const statusAfterClickingAgain = getStatus();
+
+          expect(statusBeforeClickingAgain).not.toBe(statusAfterClickingAgain);
+        };
+
+        const clickingSameSquareDoesNotChangeGameStatus = square => {
+          const statusBeforeClickingAgain = getStatus();
+
+          act(() => {
+            square.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+          });
+
+          const statusAfterClickingAgain = getStatus();
+
+          expect(statusBeforeClickingAgain).toBe(statusAfterClickingAgain);
+        };
+
+
+        const seventhSquare = getSquare(7);
+
+        clickingEmptySquareChangesGameStatus(seventhSquare);
+        clickingSameSquareDoesNotChangeGameStatus(seventhSquare);
+      });
     });
   });
 });
