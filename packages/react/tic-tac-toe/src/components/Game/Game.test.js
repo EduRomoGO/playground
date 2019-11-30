@@ -226,6 +226,13 @@ describe("Game", () => {
       });
 
       expect(document.querySelectorAll('[data-testid="move"]')).toBeTruthy();
+      expect(document.querySelectorAll('[data-testid="move"]').length).toBe(2);
+
+      act(() => {
+        getSquare(3).dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      });
+
+      expect(document.querySelectorAll('[data-testid="move"]').length).toBe(3);
     });
     // <li>
     //   <button onClick={() => this.jumpTo(move)}>{desc}</button>

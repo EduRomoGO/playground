@@ -31,6 +31,7 @@ export default () => {
   };
 
   const jumpTo = () => {};
+  // onClick={() => jumpTo(move)}
 
   return (
     <div className="game">
@@ -43,9 +44,11 @@ export default () => {
       <div className="game-info">
           <Status status={getStatus()} />
           <ol>
-            <li>
-              <button data-testid="move" onClick={() => jumpTo()}></button>
-            </li>
+            {history.map((move, i) => {
+              return <li>
+                <button key={i} data-testid="move"></button>
+              </li>;
+            })}
           </ol>
       </div>
     </div>
