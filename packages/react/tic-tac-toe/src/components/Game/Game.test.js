@@ -67,6 +67,27 @@ describe("Game", () => {
       expect(statusBeforeClickingAgain).toBe(statusAfterClickingAgain);
     };
 
+    const combineAlternatingArrays = (a, b) => {
+      let combined = [];
+      const [shorter, larger] = [a, b].sort((a, b) => a.length -b.length);
+
+      shorter.forEach((item, i) => {
+        combined.push(a[i], b[i]);
+      });
+
+      return [...combined, ...larger.slice(shorter.length)];
+    };
+
+    const finishGameInFiveMoves = ({squaresClickedWinner, squaresClickedLooser}) => {
+      const combined = combineAlternatingArrays(squaresClickedWinner, squaresClickedLooser);
+
+      combined.forEach(squareNumber => {
+        act(() => {
+          getSquare(squareNumber).dispatchEvent(new MouseEvent('click', { bubbles: true }));
+        });
+      });
+    };
+
 
     describe('on square click', () => {
       it('should fill it with next player symbol', () => {
@@ -142,27 +163,6 @@ describe("Game", () => {
         const clickingEmptSquareDoesNotChangeGameStatus = clickingSameSquareDoesNotChangeGameStatus;
         const clickingClickedSquareDoesNotChangeGameStatus = clickingSameSquareDoesNotChangeGameStatus;
 
-        const combineAlternatingArrays = (a, b) => {
-          let combined = [];
-          const [shorter, larger] = [a, b].sort((a, b) => a.length -b.length);
-
-          shorter.forEach((item, i) => {
-            combined.push(larger[i], item);
-          })
-
-          return [...combined, ...larger.slice(shorter.length)];
-        }
-
-        const finishGameInFiveMoves = async ({squaresClickedWinner, squaresClickedLooser}) => {
-          const combined = combineAlternatingArrays(squaresClickedWinner, squaresClickedLooser);
-
-          combined.forEach(squareNumber => {
-            act(() => {
-              getSquare(squareNumber).dispatchEvent(new MouseEvent('click', { bubbles: true }));
-            });
-          });
-        };
-
         finishGameInFiveMoves({squaresClickedWinner: [1, 4, 7], squaresClickedLooser: [2, 3]});
 
         expect(getStatus()).toBe('X won the game!');
@@ -173,6 +173,7 @@ describe("Game", () => {
         clickingEmptSquareDoesNotChangeGameStatus(notClickedSquare);
         clickingClickedSquareDoesNotChangeGameStatus(clickedSquare);
       });
+
     });
   });
 });
