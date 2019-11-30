@@ -46,7 +46,7 @@ export default () => {
           <ol>
             {history.map((move, i) => {
               return <li>
-                <button key={i} data-testid="move"></button>
+                <button key={i} data-testid="move">{`Go to move #${i}`}</button>
               </li>;
             })}
           </ol>

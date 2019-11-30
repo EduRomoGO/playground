@@ -18,8 +18,7 @@ describe("Game", () => {
   });
 
   const getSquare = num =>
-  document.querySelectorAll("[data-testid=square]")[num - 1];
-
+    document.querySelectorAll("[data-testid=square]")[num - 1];
 
   it("renders with/without props", () => {
     act(() => {
@@ -38,7 +37,7 @@ describe("Game", () => {
         <div class=\\"game-info\\">
           <div class=\\"status\\">Next player: X</div>
           <ol>
-            <li><button data-testid=\\"move\\"></button></li>
+            <li><button data-testid=\\"move\\">Go to move #0</button></li>
           </ol>
         </div>
       </div>"
@@ -225,17 +224,20 @@ describe("Game", () => {
         getSquare(1).dispatchEvent(new MouseEvent("click", { bubbles: true }));
       });
 
-      expect(document.querySelectorAll('[data-testid="move"]')).toBeTruthy();
-      expect(document.querySelectorAll('[data-testid="move"]').length).toBe(2);
+      const getMoves = () => document.querySelectorAll('[data-testid="move"]');
+
+      expect(getMoves()).toBeTruthy();
+      expect(getMoves().length).toBe(2);
 
       act(() => {
         getSquare(3).dispatchEvent(new MouseEvent("click", { bubbles: true }));
       });
 
-      expect(document.querySelectorAll('[data-testid="move"]').length).toBe(3);
+      expect(getMoves().length).toBe(3);
+
+      for (let i = 0; i < getMoves().length; i++) {
+        expect(getMoves()[i].textContent).toBe(`Go to move #${i}`);
+      }
     });
-    // <li>
-    //   <button onClick={() => this.jumpTo(move)}>{desc}</button>
-    // </li>
   });
 });
