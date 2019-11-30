@@ -9,8 +9,10 @@ export default () => {
   }]);
   const [xIsNext, setXIsNext] = useState(true);
 
+  const getCurrentSquares = () => history[history.length - 1].squares;
+
   const handleClick = (index) => {
-    const currentSquares = history[history.length - 1].squares;
+    const currentSquares = getCurrentSquares();
     const noWinner = calculateWinner(currentSquares) === null;
     const notPreviouslyClickedItem = currentSquares[index] === null;
 
@@ -22,8 +24,8 @@ export default () => {
     }
   }
 
-  const currentSquares = history[history.length - 1];
-  const winner = calculateWinner(currentSquares.squares);
+  const currentSquares = getCurrentSquares();
+  const winner = calculateWinner(currentSquares);
   const status = winner
     ? `${winner} won the game!`
     : `Next player: ${xIsNext ? 'X' : 'O'}`;
@@ -32,7 +34,7 @@ export default () => {
     <div className="game">
       <div className="game-board">
         <Board
-          squares={currentSquares.squares}
+          squares={currentSquares}
           onClick={handleClick}
         />
       </div>
