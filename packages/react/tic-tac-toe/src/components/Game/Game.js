@@ -11,16 +11,15 @@ export default () => {
 
   const handleClick = (index) => {
     const currentSquares = history[history.length - 1].squares;
+    const noWinner = calculateWinner(currentSquares) === null;
+    const notPreviouslyClickedItem = currentSquares[index] === null;
 
-    if (calculateWinner(currentSquares) || currentSquares[index]) {
-      return;
+    if (noWinner && notPreviouslyClickedItem) {
+      const newSquares = [...currentSquares];
+      newSquares[index] = xIsNext ? 'X' : 'O';
+      setHistory([...history, { squares: newSquares }]);
+      setXIsNext(!xIsNext);
     }
-
-    const newSquares = [...currentSquares];
-
-    newSquares[index] = xIsNext ? 'X' : 'O';
-    setHistory([...history, { squares: newSquares }]);
-    setXIsNext(!xIsNext);
   }
 
   const currentSquares = history[history.length - 1];
