@@ -78,8 +78,11 @@ describe("Game", () => {
       return [...combined, ...larger.slice(shorter.length)];
     };
 
-    const finishGameInFiveMoves = ({squaresClickedWinner, squaresClickedLooser}) => {
-      const combined = combineAlternatingArrays(squaresClickedWinner, squaresClickedLooser);
+    const finishGameInFiveMoves = ({arrays, first, second}) => {
+      const { squaresClickedWinner, squaresClickedLooser } = arrays;
+      arrays[`squaresClicked${first}`]
+      const combined = combineAlternatingArrays(arrays[`squaresClicked${first}`], arrays[`squaresClicked${second}`]);
+      // const combined = combineAlternatingArrays(squaresClickedWinner, squaresClickedLooser);
 
       combined.forEach(squareNumber => {
         act(() => {
@@ -163,7 +166,7 @@ describe("Game", () => {
         const clickingEmptSquareDoesNotChangeGameStatus = clickingSameSquareDoesNotChangeGameStatus;
         const clickingClickedSquareDoesNotChangeGameStatus = clickingSameSquareDoesNotChangeGameStatus;
 
-        finishGameInFiveMoves({squaresClickedWinner: [1, 4, 7], squaresClickedLooser: [2, 3]});
+        finishGameInFiveMoves({ arrays: {squaresClickedWinner: [1, 4, 7], squaresClickedLooser: [2, 3]}, first: 'Winner', second: 'Looser'});
 
         expect(getStatus()).toBe('X won the game!');
 
@@ -174,6 +177,15 @@ describe("Game", () => {
         clickingClickedSquareDoesNotChangeGameStatus(clickedSquare);
       });
 
+      it('should not update game status when clicking on any square (previously clicked or not) after game has finished', () => {
+        act(() => {
+          render(<Game />, container);
+        });
+
+        finishGameInFiveMoves({ arrays: {squaresClickedWinner: [1, 4, 7], squaresClickedLooser: [2, 3, 9]}, first: 'Looser', second: 'Winner'});
+
+        expect(getStatus()).toBe('O won the game!');
+      });
     });
   });
 });
