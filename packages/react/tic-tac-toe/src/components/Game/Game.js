@@ -22,24 +22,24 @@ export default () => {
       setHistory([...history, { squares: newSquares }]);
       setXIsNext(!xIsNext);
     }
-  }
+  };
 
-  const currentSquares = getCurrentSquares();
-  const winner = calculateWinner(currentSquares);
-  const status = winner
-    ? `${winner} won the game!`
-    : `Next player: ${xIsNext ? 'X' : 'O'}`;
+  const getStatus = () => {
+    const winner = calculateWinner(getCurrentSquares());
+
+    return winner ? `${winner} won the game!` : `Next player: ${xIsNext ? 'X' : 'O'}`;
+  };
 
   return (
     <div className="game">
       <div className="game-board">
         <Board
-          squares={currentSquares}
+          squares={getCurrentSquares()}
           onClick={handleClick}
         />
       </div>
       <div className="game-info">
-          <Status status={status} />
+          <Status status={getStatus()} />
       </div>
     </div>
   );
