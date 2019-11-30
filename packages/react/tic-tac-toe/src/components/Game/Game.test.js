@@ -17,7 +17,11 @@ describe("Game", () => {
     container = null;
   });
 
-  it('renders with/without props', () => {
+  const getSquare = num =>
+  document.querySelectorAll("[data-testid=square]")[num - 1];
+
+
+  it("renders with/without props", () => {
     act(() => {
       render(<Game />, container);
     });
@@ -33,23 +37,27 @@ describe("Game", () => {
         </div>
         <div class=\\"game-info\\">
           <div class=\\"status\\">Next player: X</div>
-          <ol></ol>
+          <ol>
+            <li><button data-testid=\\"move\\"></button></li>
+          </ol>
         </div>
       </div>"
     `);
   });
 
-  describe('board section', () => {
-    const getSquare = num => document.querySelectorAll("[data-testid=square]")[num -1];
-    const getStatus = () => document.querySelector('.status').textContent;
-    const getNextPlayerSymbol = () => getStatus().split(':')[1].trim();
+  describe("board section", () => {
+    const getStatus = () => document.querySelector(".status").textContent;
+    const getNextPlayerSymbol = () =>
+      getStatus()
+        .split(":")[1]
+        .trim();
 
     const clickingEmptySquareFillItWithNextPlayerSymbol = square => {
-      expect(square.innerHTML).toBe('');
+      expect(square.innerHTML).toBe("");
       const nextPlayerSymbol = getNextPlayerSymbol();
 
       act(() => {
-        square.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+        square.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       });
 
       expect(square.innerHTML).toBe(nextPlayerSymbol);
@@ -59,7 +67,7 @@ describe("Game", () => {
       const statusBeforeClickingAgain = getStatus();
 
       act(() => {
-        square.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+        square.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       });
 
       const statusAfterClickingAgain = getStatus();
@@ -69,7 +77,7 @@ describe("Game", () => {
 
     const combineAlternatingArrays = (a, b) => {
       let combined = [];
-      const [shorter, larger] = [a, b].sort((a, b) => a.length -b.length);
+      const [shorter, larger] = [a, b].sort((a, b) => a.length - b.length);
 
       shorter.forEach((item, i) => {
         combined.push(a[i], b[i]);
@@ -78,22 +86,26 @@ describe("Game", () => {
       return [...combined, ...larger.slice(shorter.length)];
     };
 
-    const finishGameInFiveMoves = ({arrays, first, second}) => {
+    const finishGameInFiveMoves = ({ arrays, first, second }) => {
       const { squaresClickedWinner, squaresClickedLooser } = arrays;
-      arrays[`squaresClicked${first}`]
-      const combined = combineAlternatingArrays(arrays[`squaresClicked${first}`], arrays[`squaresClicked${second}`]);
+      arrays[`squaresClicked${first}`];
+      const combined = combineAlternatingArrays(
+        arrays[`squaresClicked${first}`],
+        arrays[`squaresClicked${second}`]
+      );
       // const combined = combineAlternatingArrays(squaresClickedWinner, squaresClickedLooser);
 
       combined.forEach(squareNumber => {
         act(() => {
-          getSquare(squareNumber).dispatchEvent(new MouseEvent('click', { bubbles: true }));
+          getSquare(squareNumber).dispatchEvent(
+            new MouseEvent("click", { bubbles: true })
+          );
         });
       });
     };
 
-
-    describe('on square click', () => {
-      it('should fill it with next player symbol', () => {
+    describe("on square click", () => {
+      it("should fill it with next player symbol", () => {
         act(() => {
           render(<Game />, container);
         });
@@ -102,7 +114,7 @@ describe("Game", () => {
         clickingEmptySquareFillItWithNextPlayerSymbol(getSquare(5));
       });
 
-      it('should not change its content if has already been clicked', () => {
+      it("should not change its content if has already been clicked", () => {
         act(() => {
           render(<Game />, container);
         });
@@ -112,7 +124,7 @@ describe("Game", () => {
         const clickingSameSquareDoesNotChangeItsContent = square => {
           const squareContentBeforeClickingAgain = square.innerHTML;
           act(() => {
-            square.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+            square.dispatchEvent(new MouseEvent("click", { bubbles: true }));
           });
 
           expect(squareContentBeforeClickingAgain).toBe(square.innerHTML);
@@ -122,7 +134,7 @@ describe("Game", () => {
         clickingSameSquareDoesNotChangeItsContent(secondSquare);
       });
 
-      it('should update game status', () => {
+      it("should update game status", () => {
         act(() => {
           render(<Game />, container);
         });
@@ -131,7 +143,7 @@ describe("Game", () => {
           const statusBeforeClickingAgain = getStatus();
 
           act(() => {
-            square.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+            square.dispatchEvent(new MouseEvent("click", { bubbles: true }));
           });
 
           const statusAfterClickingAgain = getStatus();
@@ -144,7 +156,7 @@ describe("Game", () => {
         clickingEmptySquareChangesGameStatus(seventhSquare);
       });
 
-      it('should not update game status when clicking on an already clicked square', () => {
+      it("should not update game status when clicking on an already clicked square", () => {
         act(() => {
           render(<Game />, container);
         });
@@ -152,13 +164,15 @@ describe("Game", () => {
         const seventhSquare = getSquare(7);
 
         act(() => {
-          seventhSquare.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+          seventhSquare.dispatchEvent(
+            new MouseEvent("click", { bubbles: true })
+          );
         });
 
         clickingSameSquareDoesNotChangeGameStatus(seventhSquare);
       });
 
-      it('should not update game status when clicking on any square (previously clicked or not) after game has finished', () => {
+      it("should not update game status when clicking on any square (previously clicked or not) after game has finished", () => {
         act(() => {
           render(<Game />, container);
         });
@@ -166,9 +180,16 @@ describe("Game", () => {
         const clickingEmptSquareDoesNotChangeGameStatus = clickingSameSquareDoesNotChangeGameStatus;
         const clickingClickedSquareDoesNotChangeGameStatus = clickingSameSquareDoesNotChangeGameStatus;
 
-        finishGameInFiveMoves({ arrays: {squaresClickedWinner: [1, 4, 7], squaresClickedLooser: [2, 3]}, first: 'Winner', second: 'Looser'});
+        finishGameInFiveMoves({
+          arrays: {
+            squaresClickedWinner: [1, 4, 7],
+            squaresClickedLooser: [2, 3]
+          },
+          first: "Winner",
+          second: "Looser"
+        });
 
-        expect(getStatus()).toBe('X won the game!');
+        expect(getStatus()).toBe("X won the game!");
 
         const notClickedSquare = getSquare(9);
         const clickedSquare = getSquare(1);
@@ -177,15 +198,37 @@ describe("Game", () => {
         clickingClickedSquareDoesNotChangeGameStatus(clickedSquare);
       });
 
-      it('should update game status after game has finished', () => {
+      it("should update game status after game has finished", () => {
         act(() => {
           render(<Game />, container);
         });
 
-        finishGameInFiveMoves({ arrays: {squaresClickedWinner: [1, 4, 7], squaresClickedLooser: [2, 3, 9]}, first: 'Looser', second: 'Winner'});
+        finishGameInFiveMoves({
+          arrays: {
+            squaresClickedWinner: [1, 4, 7],
+            squaresClickedLooser: [2, 3, 9]
+          },
+          first: "Looser",
+          second: "Winner"
+        });
 
-        expect(getStatus()).toBe('O won the game!');
+        expect(getStatus()).toBe("O won the game!");
       });
     });
+  });
+
+  describe("info section", () => {
+    it("should show past moves as a list", () => {
+      render(<Game />, container);
+
+      act(() => {
+        getSquare(1).dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      });
+
+      expect(document.querySelectorAll('[data-testid="move"]')).toBeTruthy();
+    });
+    // <li>
+    //   <button onClick={() => this.jumpTo(move)}>{desc}</button>
+    // </li>
   });
 });

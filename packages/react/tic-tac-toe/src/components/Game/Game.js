@@ -30,6 +30,8 @@ export default () => {
     return winner ? `${winner} won the game!` : `Next player: ${xIsNext ? 'X' : 'O'}`;
   };
 
+  const jumpTo = () => {};
+
   return (
     <div className="game">
       <div className="game-board">
@@ -40,6 +42,11 @@ export default () => {
       </div>
       <div className="game-info">
           <Status status={getStatus()} />
+          <ol>
+            <li>
+              <button data-testid="move" onClick={() => jumpTo()}></button>
+            </li>
+          </ol>
       </div>
     </div>
   );
