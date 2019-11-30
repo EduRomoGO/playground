@@ -164,6 +164,9 @@ describe("Game", () => {
         };
 
         finishGameInFiveMoves({squaresClickedWinner: [1, 4, 7], squaresClickedLooser: [2, 3]});
+
+        expect(getStatus()).toBe('X won the game!');
+
         const notClickedSquare = getSquare(9);
         const clickedSquare = getSquare(1);
 
