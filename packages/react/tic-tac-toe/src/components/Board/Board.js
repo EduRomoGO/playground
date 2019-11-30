@@ -3,7 +3,7 @@ import Square from '../Square/Square.js';
 
 export default ({squares, onClick}) => {
   const renderSquare = i => {
-    return <Square data-testid="square" value={squares[i]} onClick={() => onClick(i)} />;
+    return <Square value={squares[i]} onClick={() => onClick(i)} />;
   }
 
   const getBoard = () => (<div data-testid="board">
