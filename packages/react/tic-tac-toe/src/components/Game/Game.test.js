@@ -177,7 +177,7 @@ describe("Game", () => {
         clickingClickedSquareDoesNotChangeGameStatus(clickedSquare);
       });
 
-      it('should not update game status when clicking on any square (previously clicked or not) after game has finished', () => {
+      it('should update game status after game has finished', () => {
         act(() => {
           render(<Game />, container);
         });
