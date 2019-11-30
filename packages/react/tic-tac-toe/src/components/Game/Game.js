@@ -21,10 +21,10 @@ export default class Game extends React.Component {
       return;
     }
     newSquares[index] = this.state.xIsNext ? 'X' : 'O';
-    this.setState({
-      history: [...this.state.history, { squares: newSquares }],
-      xIsNext: !this.state.xIsNext,
-    });
+    this.setState((state) => ({
+      history: [...state.history, { squares: newSquares }],
+      xIsNext: !state.xIsNext,
+    }));
   }
 
 

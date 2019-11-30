@@ -55,6 +55,19 @@ describe("Game", () => {
       expect(square.innerHTML).toBe(nextPlayerSymbol);
     };
 
+    const clickingSameSquareDoesNotChangeGameStatus = square => {
+      const statusBeforeClickingAgain = getStatus();
+
+      act(() => {
+        square.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      });
+
+      const statusAfterClickingAgain = getStatus();
+
+      expect(statusBeforeClickingAgain).toBe(statusAfterClickingAgain);
+    };
+
+
     describe('on square click', () => {
       it('should fill it with next player symbol', () => {
         act(() => {
@@ -112,18 +125,6 @@ describe("Game", () => {
           render(<Game />, container);
         });
 
-        const clickingSameSquareDoesNotChangeGameStatus = square => {
-          const statusBeforeClickingAgain = getStatus();
-
-          act(() => {
-            square.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-          });
-
-          const statusAfterClickingAgain = getStatus();
-
-          expect(statusBeforeClickingAgain).toBe(statusAfterClickingAgain);
-        };
-
         const seventhSquare = getSquare(7);
 
         act(() => {
@@ -131,6 +132,43 @@ describe("Game", () => {
         });
 
         clickingSameSquareDoesNotChangeGameStatus(seventhSquare);
+      });
+
+      it('should not update game status when clicking on any square (previously clicked or not) after game has finished', () => {
+        act(() => {
+          render(<Game />, container);
+        });
+
+        const clickingEmptSquareDoesNotChangeGameStatus = clickingSameSquareDoesNotChangeGameStatus;
+        const clickingClickedSquareDoesNotChangeGameStatus = clickingSameSquareDoesNotChangeGameStatus;
+
+        const combineAlternatingArrays = (a, b) => {
+          let combined = [];
+          const [shorter, larger] = [a, b].sort((a, b) => a.length -b.length);
+
+          shorter.forEach((item, i) => {
+            combined.push(larger[i], item);
+          })
+
+          return [...combined, ...larger.slice(shorter.length)];
+        }
+
+        const finishGameInFiveMoves = async ({squaresClickedWinner, squaresClickedLooser}) => {
+          const combined = combineAlternatingArrays(squaresClickedWinner, squaresClickedLooser);
+
+          combined.forEach(squareNumber => {
+            act(() => {
+              getSquare(squareNumber).dispatchEvent(new MouseEvent('click', { bubbles: true }));
+            });
+          });
+        };
+
+        finishGameInFiveMoves({squaresClickedWinner: [1, 4, 7], squaresClickedLooser: [2, 3]});
+        const notClickedSquare = getSquare(9);
+        const clickedSquare = getSquare(1);
+
+        clickingEmptSquareDoesNotChangeGameStatus(notClickedSquare);
+        clickingClickedSquareDoesNotChangeGameStatus(clickedSquare);
       });
     });
   });
