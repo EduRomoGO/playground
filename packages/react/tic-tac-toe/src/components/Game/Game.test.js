@@ -257,23 +257,32 @@ describe("Game", () => {
       playGame(gameMoves);
 
       // console.log(gameMoves);
-      const getSquaresMap = () => gameMoves.reduce(
-        (acc, next, i) => {
-          return { ...acc, [next]: i % 2 === 0 ? 'X' : 'O' };
-        },
-        {},
-      );
-      const squaresMap = getSquaresMap();
-      // console.log(getSquaresMap())
+      const getCurrentSquaresMap = () => {
+        let currentSquareMap = {};
+
+        gameMoves.forEach((move, i) => {
+          if (i <= currentMove) {
+            currentSquareMap[move] =  i % 2 === 0 ? 'X' : 'O';
+          }
+        });
+
+        for (let i = 0; i < 9; i++) {
+          if (!currentSquareMap[i]) {
+            currentSquareMap[i] = '';
+          }
+        }
+
+        return currentSquareMap;
+      };
+
+      const squaresMap = getCurrentSquaresMap();
+      // console.log(squaresMap);
 
 
       const checkBoardState = () => {
         Array.from(document.querySelectorAll("[data-testid=square]")).forEach((square, i) => {
           // console.log('square content: ', square.textContent);
           // console.log('index: ', i);
-          if (!squaresMap[i+1]) {
-            squaresMap[i+1] = '';
-          }
           expect(square.textContent).toBe(squaresMap[i+1]);
         });
       }
