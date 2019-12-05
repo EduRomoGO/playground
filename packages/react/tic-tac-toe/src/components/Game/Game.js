@@ -30,8 +30,9 @@ export default () => {
     return winner ? `${winner} won the game!` : `Next player: ${xIsNext ? 'X' : 'O'}`;
   };
 
-  const jumpTo = () => {};
-  // onClick={() => jumpTo(move)}
+  const jumpTo = move => {
+    setXIsNext(false);
+  };
 
   return (
     <div className="game">
@@ -46,7 +47,7 @@ export default () => {
           <ol>
             {history.map((move, i) => {
               return <li key={i}>
-                <button data-testid="move">{`Go to move #${i}`}</button>
+                <button onClick={() => jumpTo(move)} data-testid="move">{`Go to move #${i}`}</button>
               </li>;
             })}
           </ol>
