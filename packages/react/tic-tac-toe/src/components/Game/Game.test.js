@@ -241,6 +241,9 @@ describe("Game", () => {
     });
 
     it('clicking on any of the moves buttons updates board and status with the situation in this moment', () => {
+      let gameMoves;
+      let currentMove = 0;
+
       act(() => {
         render(<Game />, container);
       });
@@ -249,36 +252,37 @@ describe("Game", () => {
 
       expect(nextPlayerSymbolBefore).toBe('X');
 
-      const gameMoves = getMoves({
-        arrays: {
-          squaresClickedWinner: [1, 4, 7],
-          squaresClickedLooser: [2, 3, 9]
-        },
-        first: "Looser",
-        second: "Winner"
-      });
+      gameMoves = [1, 2, 4, 3, 9, 5, 7];
+      currentMove = gameMoves.length;
       playGame(gameMoves);
 
       // console.log(gameMoves);
-      const squaresMap = gameMoves.reduce(
+      const getSquaresMap = () => gameMoves.reduce(
         (acc, next, i) => {
           return { ...acc, [next]: i % 2 === 0 ? 'X' : 'O' };
         },
         {},
       );
-      // console.log(squaresMap)
+      const squaresMap = getSquaresMap();
+      // console.log(getSquaresMap())
 
-      Array.from(document.querySelectorAll("[data-testid=square]")).forEach((square, i) => {
-        // console.log('square content: ', square.textContent);
-        // console.log('index: ', i);
-        if (!squaresMap[i+1]) {
-          squaresMap[i+1] = '';
-        }
-        expect(square.textContent).toBe(squaresMap[i+1]);
-      });
+
+      const checkBoardState = () => {
+        Array.from(document.querySelectorAll("[data-testid=square]")).forEach((square, i) => {
+          // console.log('square content: ', square.textContent);
+          // console.log('index: ', i);
+          if (!squaresMap[i+1]) {
+            squaresMap[i+1] = '';
+          }
+          expect(square.textContent).toBe(squaresMap[i+1]);
+        });
+      }
+
+      checkBoardState();
 
       act(() => {
-        getByText(container, 'Go to move #1').dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        currentMove = 1;
+        getByText(container, `Go to move #${currentMove}`).dispatchEvent(new MouseEvent("click", { bubbles: true }));
       });
       expect(getNextPlayerSymbol()).toBe('O');
 
