@@ -277,28 +277,43 @@ describe("Game", () => {
       };
 
       const checkBoardState = () => {
+        const currentSquareMap = getCurrentSquaresMap();
+
         Array.from(document.querySelectorAll("[data-testid=square]")).forEach((square, i) => {
           // console.log('square content: ', square.textContent);
           // console.log('index: ', i);
-          expect(square.textContent).toBe(getCurrentSquaresMap()[i+1]);
+          expect(square.textContent).toBe(currentSquareMap[i+1]);
         });
       }
 
       checkBoardState();
 
+      currentMove = 1;
       act(() => {
-        currentMove = 1;
         getByText(container, `Go to move #${currentMove}`).dispatchEvent(new MouseEvent("click", { bubbles: true }));
       });
       expect(getNextPlayerSymbol()).toBe('O');
       checkBoardState();
 
+      currentMove = 2;
       act(() => {
-        currentMove = 2
         getByText(container, `Go to move #${currentMove}`).dispatchEvent(new MouseEvent("click", { bubbles: true }));
       });
       expect(getNextPlayerSymbol()).toBe('X');
       checkBoardState();
+
+      // Should continue with different game if a new square is clicked while time travelling
+      // ****************************
+      gameMoves = [...gameMoves.slice(0, currentMove), 7];
+      currentMove = 3;
+      act(() => {
+        getSquare(7).dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      });
+      // const numberOfMoves = currentMove + 1;
+
+      // checkBoardState();
+      // expect()
+      // ****************************
     });
   });
 });
