@@ -38,21 +38,19 @@ describe("Game", () => {
     return [...combined, ...larger.slice(shorter.length)];
   };
 
-  const playGame = ({ arrays, first, second }) => {
-    const combined = combineAlternatingArrays(
-      arrays[`squaresClicked${first}`],
-      arrays[`squaresClicked${second}`]
-    );
+  const getMoves = ({ arrays, first, second }) => combineAlternatingArrays(
+    arrays[`squaresClicked${first}`],
+    arrays[`squaresClicked${second}`]
+  );
 
-    combined.forEach(squareNumber => {
+  const playGame = moves => {
+    moves.forEach(squareNumber => {
       act(() => {
         getSquare(squareNumber).dispatchEvent(
           new MouseEvent("click", { bubbles: true })
         );
       });
     });
-
-    return combined;
   };
 
   it("renders with/without props", () => {
@@ -179,7 +177,7 @@ describe("Game", () => {
         const clickingEmptSquareDoesNotChangeGameStatus = clickingSameSquareDoesNotChangeGameStatus;
         const clickingClickedSquareDoesNotChangeGameStatus = clickingSameSquareDoesNotChangeGameStatus;
 
-        playGame({
+        const gameMoves = getMoves({
           arrays: {
             squaresClickedWinner: [1, 4, 7],
             squaresClickedLooser: [2, 3]
@@ -187,6 +185,7 @@ describe("Game", () => {
           first: "Winner",
           second: "Looser"
         });
+        playGame(gameMoves);
 
         expect(getStatus()).toBe("X won the game!");
 
@@ -202,7 +201,7 @@ describe("Game", () => {
           render(<Game />, container);
         });
 
-        playGame({
+        const gameMoves = getMoves({
           arrays: {
             squaresClickedWinner: [1, 4, 7],
             squaresClickedLooser: [2, 3, 9]
@@ -210,6 +209,7 @@ describe("Game", () => {
           first: "Looser",
           second: "Winner"
         });
+        playGame(gameMoves);
 
         expect(getStatus()).toBe("O won the game!");
       });
@@ -249,7 +249,7 @@ describe("Game", () => {
 
       expect(nextPlayerSymbolBefore).toBe('X');
 
-      const squaresClicked = playGame({
+      const gameMoves = getMoves({
         arrays: {
           squaresClickedWinner: [1, 4, 7],
           squaresClickedLooser: [2, 3, 9]
@@ -257,9 +257,10 @@ describe("Game", () => {
         first: "Looser",
         second: "Winner"
       });
+      playGame(gameMoves);
 
-      // console.log(squaresClicked);
-      const squaresMap = squaresClicked.reduce(
+      // console.log(gameMoves);
+      const squaresMap = gameMoves.reduce(
         (acc, next, i) => {
           return { ...acc, [next]: i % 2 === 0 ? 'X' : 'O' };
         },
