@@ -256,34 +256,31 @@ describe("Game", () => {
       currentMove = gameMoves.length;
       playGame(gameMoves);
 
-      // console.log(gameMoves);
       const getCurrentSquaresMap = () => {
         let currentSquareMap = {};
 
+        // console.log(gameMoves);
         gameMoves.forEach((move, i) => {
-          if (i <= currentMove) {
+          if (i < currentMove) {
             currentSquareMap[move] =  i % 2 === 0 ? 'X' : 'O';
           }
         });
 
         for (let i = 0; i < 9; i++) {
-          if (!currentSquareMap[i]) {
-            currentSquareMap[i] = '';
+          if (!currentSquareMap[i+1]) {
+            currentSquareMap[i+1] = '';
           }
         }
 
+        // console.log(currentSquareMap);
         return currentSquareMap;
       };
-
-      const squaresMap = getCurrentSquaresMap();
-      // console.log(squaresMap);
-
 
       const checkBoardState = () => {
         Array.from(document.querySelectorAll("[data-testid=square]")).forEach((square, i) => {
           // console.log('square content: ', square.textContent);
           // console.log('index: ', i);
-          expect(square.textContent).toBe(squaresMap[i+1]);
+          expect(square.textContent).toBe(getCurrentSquaresMap()[i+1]);
         });
       }
 
@@ -294,16 +291,14 @@ describe("Game", () => {
         getByText(container, `Go to move #${currentMove}`).dispatchEvent(new MouseEvent("click", { bubbles: true }));
       });
       expect(getNextPlayerSymbol()).toBe('O');
-
-
-      // [1, 2, 3, 4].forEach(squareNumber => {
-      //   expect(getSquare(squareNumber)).innerHTML.toBe('');
-      // });
+      checkBoardState();
 
       act(() => {
-        getByText(container, 'Go to move #2').dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        currentMove = 2
+        getByText(container, `Go to move #${currentMove}`).dispatchEvent(new MouseEvent("click", { bubbles: true }));
       });
       expect(getNextPlayerSymbol()).toBe('X');
+      checkBoardState();
     });
   });
 });
