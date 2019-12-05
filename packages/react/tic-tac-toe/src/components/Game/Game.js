@@ -21,7 +21,7 @@ export default () => {
     if (noWinner && notPreviouslyClickedItem) {
       const newSquares = [...currentSquares];
       newSquares[index] = getNextSymbol();
-      setHistory([...history, { squares: newSquares }]);
+      setHistory([...history.slice(0, currentMove+1), { squares: newSquares }]);
       setCurrentMove(currentMove + 1);
     }
   };

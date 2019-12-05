@@ -311,7 +311,7 @@ describe("Game", () => {
       });
       // const numberOfMoves = currentMove + 1;
 
-      // checkBoardState();
+      checkBoardState();
       // expect()
       // ****************************
     });
