@@ -248,20 +248,14 @@ describe("Game", () => {
 
       expect(nextPlayerSymbolBefore).toBe('X');
 
-      [1, 2, 3, 4].forEach(squareNumber => {
-        act(() => {
-          getSquare(squareNumber).dispatchEvent(new MouseEvent("click", { bubbles: true }));
-        });
+      const squaresClicked = playGame({
+        arrays: {
+          squaresClickedWinner: [1, 4, 7],
+          squaresClickedLooser: [2, 3, 9]
+        },
+        first: "Looser",
+        second: "Winner"
       });
-
-      // const squaresClicked = playGame({
-      //   arrays: {
-      //     squaresClickedWinner: [1, 4, 7],
-      //     squaresClickedLooser: [2, 3, 9]
-      //   },
-      //   first: "Looser",
-      //   second: "Winner"
-      // });
 
 
       act(() => {

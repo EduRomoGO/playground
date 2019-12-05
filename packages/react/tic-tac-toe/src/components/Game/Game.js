@@ -9,7 +9,7 @@ export default () => {
   }]);
   const [currentMove, setCurrentMove] = useState(0);
 
-  const getCurrentSquares = () => history[history.length - 1].squares;
+  const getCurrentSquares = () => history[currentMove].squares;
   const isCurrentMoveEven = currentMove % 2 === 0;
   const getNextSymbol = () => isCurrentMoveEven ? 'X' : 'O';
 
@@ -33,10 +33,7 @@ export default () => {
   };
 
   const jumpTo = (move, i) => {
-    // console.log(currentMove);
     setCurrentMove(i);
-    // console.log(currentMove);
-    // const isCurrentMoveEven = currentMove % 2 === 0;
   };
 
   return (
