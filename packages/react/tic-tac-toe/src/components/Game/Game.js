@@ -8,9 +8,10 @@ export default () => {
     squares: Array(9).fill(null),
   }]);
   const [currentMove, setCurrentMove] = useState(0);
-  const [xIsNext, setXIsNext] = useState(true);
 
   const getCurrentSquares = () => history[history.length - 1].squares;
+  const isCurrentMoveEven = currentMove % 2 === 0;
+  const getNextSymbol = () => isCurrentMoveEven ? 'X' : 'O';
 
   const handleClick = (index) => {
     const currentSquares = getCurrentSquares();
@@ -19,22 +20,23 @@ export default () => {
 
     if (noWinner && notPreviouslyClickedItem) {
       const newSquares = [...currentSquares];
-      newSquares[index] = xIsNext ? 'X' : 'O';
+      newSquares[index] = getNextSymbol();
       setHistory([...history, { squares: newSquares }]);
-      setXIsNext(!xIsNext);
+      setCurrentMove(currentMove + 1);
     }
   };
 
   const getStatus = () => {
     const winner = calculateWinner(getCurrentSquares());
 
-    return winner ? `${winner} won the game!` : `Next player: ${xIsNext ? 'X' : 'O'}`;
+    return winner ? `${winner} won the game!` : `Next player: ${getNextSymbol()}`;
   };
 
   const jumpTo = (move, i) => {
+    // console.log(currentMove);
     setCurrentMove(i);
-    const isCurrentMoveEven = i % 2 === 0;
-    setXIsNext(isCurrentMoveEven);
+    // console.log(currentMove);
+    // const isCurrentMoveEven = currentMove % 2 === 0;
   };
 
   return (
