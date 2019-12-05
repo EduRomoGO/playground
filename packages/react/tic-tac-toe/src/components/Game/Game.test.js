@@ -4,6 +4,7 @@ import { act } from "react-dom/test-utils";
 import Game from "./Game.js";
 import pretty from "pretty";
 import { getByText } from '@testing-library/dom';
+import { accessSync } from "fs";
 
 describe("Game", () => {
   let container;
@@ -257,6 +258,23 @@ describe("Game", () => {
         second: "Winner"
       });
 
+      // console.log(squaresClicked);
+      const squaresMap = squaresClicked.reduce(
+        (acc, next, i) => {
+          return { ...acc, [next]: i % 2 === 0 ? 'X' : 'O' };
+        },
+        {},
+      );
+      // console.log(squaresMap)
+
+      Array.from(document.querySelectorAll("[data-testid=square]")).forEach((square, i) => {
+        // console.log('square content: ', square.textContent);
+        // console.log('index: ', i);
+        if (!squaresMap[i+1]) {
+          squaresMap[i+1] = '';
+        }
+        expect(square.textContent).toBe(squaresMap[i+1]);
+      });
 
       act(() => {
         getByText(container, 'Go to move #1').dispatchEvent(new MouseEvent("click", { bubbles: true }));
