@@ -31,7 +31,10 @@ export default () => {
   };
 
   const jumpTo = move => {
-    setXIsNext(false);
+    const numberOfMoves = move.squares.filter(n => n !== null).length;
+    const evenNumberOfMoves = numberOfMoves % 2 === 0;
+
+    setXIsNext(evenNumberOfMoves);
   };
 
   return (
