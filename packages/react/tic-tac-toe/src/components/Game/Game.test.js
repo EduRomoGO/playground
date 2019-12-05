@@ -3,6 +3,7 @@ import { unmountComponentAtNode, render } from "react-dom";
 import { act } from "react-dom/test-utils";
 import Game from "./Game.js";
 import pretty from "pretty";
+import { getByText } from '@testing-library/dom';
 
 describe("Game", () => {
   let container;
@@ -19,6 +20,11 @@ describe("Game", () => {
 
   const getSquare = num =>
     document.querySelectorAll("[data-testid=square]")[num - 1];
+  const getStatus = () => document.querySelector(".status").textContent;
+  const getNextPlayerSymbol = () =>
+    getStatus()
+      .split(":")[1]
+      .trim();
 
   it("renders with/without props", () => {
     act(() => {
@@ -45,12 +51,6 @@ describe("Game", () => {
   });
 
   describe("board section", () => {
-    const getStatus = () => document.querySelector(".status").textContent;
-    const getNextPlayerSymbol = () =>
-      getStatus()
-        .split(":")[1]
-        .trim();
-
     const clickingEmptySquareFillItWithNextPlayerSymbol = square => {
       expect(square.innerHTML).toBe("");
       const nextPlayerSymbol = getNextPlayerSymbol();
@@ -86,13 +86,10 @@ describe("Game", () => {
     };
 
     const finishGameInFiveMoves = ({ arrays, first, second }) => {
-      const { squaresClickedWinner, squaresClickedLooser } = arrays;
-      arrays[`squaresClicked${first}`];
       const combined = combineAlternatingArrays(
         arrays[`squaresClicked${first}`],
         arrays[`squaresClicked${second}`]
       );
-      // const combined = combineAlternatingArrays(squaresClickedWinner, squaresClickedLooser);
 
       combined.forEach(squareNumber => {
         act(() => {
@@ -238,6 +235,30 @@ describe("Game", () => {
       for (let i = 0; i < getMoves().length; i++) {
         expect(getMoves()[i].textContent).toBe(`Go to move #${i}`);
       }
+    });
+
+    it('clicking on any of the moves buttons updates board and status with the situation in this moment', () => {
+      act(() => {
+        render(<Game />, container);
+      });
+
+      const nextPlayerSymbolBefore = getNextPlayerSymbol();
+
+      expect(nextPlayerSymbolBefore).toBe('X');
+
+      [1, 2, 3, 4].forEach(squareNumber => {
+        act(() => {
+          getSquare(squareNumber).dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        });
+      });
+
+      act(() => {
+        getByText(container, 'Go to move #1').dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      });
+
+      const nextPlayerSymbolAfter = getNextPlayerSymbol();
+
+      expect(nextPlayerSymbolAfter).toBe('O');
     });
   });
 });

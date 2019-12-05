@@ -45,8 +45,8 @@ export default () => {
           <Status status={getStatus()} />
           <ol>
             {history.map((move, i) => {
-              return <li>
-                <button key={i} data-testid="move">{`Go to move #${i}`}</button>
+              return <li key={i}>
+                <button data-testid="move">{`Go to move #${i}`}</button>
               </li>;
             })}
           </ol>
