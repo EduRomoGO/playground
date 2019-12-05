@@ -7,6 +7,7 @@ export default () => {
   const [history, setHistory] = useState([{
     squares: Array(9).fill(null),
   }]);
+  const [currentMove, setCurrentMove] = useState(0);
   const [xIsNext, setXIsNext] = useState(true);
 
   const getCurrentSquares = () => history[history.length - 1].squares;
@@ -30,11 +31,10 @@ export default () => {
     return winner ? `${winner} won the game!` : `Next player: ${xIsNext ? 'X' : 'O'}`;
   };
 
-  const jumpTo = move => {
-    const numberOfMoves = move.squares.filter(n => n !== null).length;
-    const evenNumberOfMoves = numberOfMoves % 2 === 0;
-
-    setXIsNext(evenNumberOfMoves);
+  const jumpTo = (move, i) => {
+    setCurrentMove(i);
+    const isCurrentMoveEven = i % 2 === 0;
+    setXIsNext(isCurrentMoveEven);
   };
 
   return (
@@ -50,7 +50,7 @@ export default () => {
           <ol>
             {history.map((move, i) => {
               return <li key={i}>
-                <button onClick={() => jumpTo(move)} data-testid="move">{`Go to move #${i}`}</button>
+                <button onClick={() => jumpTo(move, i)} data-testid="move">{`Go to move #${i}`}</button>
               </li>;
             })}
           </ol>
