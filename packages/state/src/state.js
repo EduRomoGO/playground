@@ -46,15 +46,44 @@ class House {
     changeStyle(newStyle) {
         this.config.global.style = newStyle;
         this.config.garage.changeSize('bigger');
+        this.config.kitchen.removeAisle();
     }
 
-    renderConfig() {
+    renderHouse() {
         console.log(this.config);
     }
 }
 
 const myHouse = new House();
 
-myHouse.renderConfig();
+myHouse.renderHouse();
 myHouse.changeStyle('classic');
-myHouse.renderConfig();
+myHouse.renderHouse();
+
+
+const kitchen = { aisle: true, fridge: { size: 'big', combi: true } };
+const garage = { size: 'big' };
+const myOtherHouse = {
+    global: { style: 'modern' },
+    garage: { ...garage},
+    kitchen: { ...kitchen},
+};
+
+const renderHouse = house => console.log(house);
+
+const changeStyle = (house, newStyle) => {
+    const newHouse = { ...house};
+
+    newHouse.global = newStyle;
+
+    if (newStyle === 'classic') {
+        newHouse.garage = { ...garage, size: 'bigger' };
+        newHouse.kitchen = { ...kitchen, aisle: false };
+    }
+
+    return newHouse;
+};
+
+renderHouse(myOtherHouse);
+const updatedHouse = changeStyle(myOtherHouse, 'classic');
+renderHouse(updatedHouse);
