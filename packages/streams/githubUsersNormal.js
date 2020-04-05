@@ -1,16 +1,18 @@
 import axios from './node_modules/axios';
 
+const fetchUsers = async () => {
+    const offset = Math.floor(Math.random() * Math.floor(500));
+    const { data: users } = await axios.get(`https://api.github.com/users?since=${offset}`);
+
+    return users;
+}
+
+const getRandomUser = users => {
+    return users[Math.floor(Math.random() * users.length)];
+}
+
 export const loadUsers = async () => {
-    const fetchUsers = async () => {
-        const { data: users } = await axios.get('https://api.github.com/users');
-
-        return users;
-    }
     const users = await fetchUsers();
-
-    const getRandomUser = users => {
-        return users[Math.floor(Math.random() * users.length)];
-    }
 
     const user1 = getRandomUser(users)
     const user2 = getRandomUser(users)
