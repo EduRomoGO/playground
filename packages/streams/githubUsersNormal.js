@@ -1,7 +1,12 @@
 import axios from './node_modules/axios';
 
 export const loadUsers = async () => {
-    const { data: users } = await axios.get('https://api.github.com/users');
+    const fetchUsers = async () => {
+        const { data: users } = await axios.get('https://api.github.com/users');
+
+        return users;
+    }
+    const users = await fetchUsers();
 
     const getRandomUser = users => {
         return users[Math.floor(Math.random() * users.length)];
@@ -17,7 +22,9 @@ export const loadUsers = async () => {
         userNode.querySelector('.name').textContent = user ? user.login : ''
     }
     
-    document.querySelector('button').addEventListener('click', () => {
+    document.querySelector('button').addEventListener('click', async () => {
+        const users = await fetchUsers();
+
         fillData(null, 1)
         fillData(null, 2)    
 
@@ -30,7 +37,9 @@ export const loadUsers = async () => {
         }, 300);
     });
 
-    [...document.querySelectorAll('span')].map(n => n.addEventListener('click', (event) => {
+    [...document.querySelectorAll('span')].map(n => n.addEventListener('click', async (event) => {
+        const users = await fetchUsers();
+
         fillData(null, event.target.dataset.id)
         setTimeout(() => {
             const user = getRandomUser(users)
