@@ -2,4 +2,7 @@ node_modules/
 .DS_Store
 nativo/react-native/meetingCostCalculator
 
+packages/node_modules/*
+packages/streams/.cache
+
 coverage
