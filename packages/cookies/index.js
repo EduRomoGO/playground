@@ -4,7 +4,10 @@ const path = require("path");
 const port = 3000;
 
 app.get("/", (req, res) => {
-  res.setHeader("Set-Cookie", ["type=ninja", "language=javascript"]);
+  res.setHeader("Set-Cookie", [
+    "type=ninja; Max-Age=20",
+    "language=javascript",
+  ]);
   res.send("Hello World!");
 });
 
