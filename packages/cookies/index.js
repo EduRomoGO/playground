@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const path = require("path");
 const port = 3000;
 
 app.get("/", (req, res) => {
@@ -8,7 +9,11 @@ app.get("/", (req, res) => {
 });
 
 app.get("/cookie", (req, res) => {
-  res.send("Hello World!");
+  res.sendFile(path.join(__dirname, "/static/index.html"));
+});
+
+app.get("/other", (req, res) => {
+  res.send("other!");
 });
 
 app.listen(port, () => {
