@@ -58,4 +58,5 @@ const runExample = async () => {
   };
   console.log(await logItems());
 };
+
 runExample();
